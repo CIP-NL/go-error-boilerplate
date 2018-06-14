@@ -1,34 +1,25 @@
+// Package go_error_boilerplate defines a boilerplate for the errors used in CIP go projects.
 package go_error_boilerplate
 
-// Boilerplate error code for use in any go project in the CIP project. Errors should be generated as follows:
-// a function returns an ErrorInterface, which is checked for IsNil(). Don't directly check by accessing code, kind or error,
-// as a nil interface != nil.
-//
-//--REQUIRED --
-// Code() is the getter for code, and should return a description that does not change and can
-// be used to specifically catch an error.
-//
-//--REQUIRED --
-// Kind() is the getter for kind, a general classification of the Error and represented by an enumeration. 0 means the kind is None.
-//
-//--REQUIRED --
-// Error() is the getter for the string accessor, which should return a human readable representation of the error.
-//
-//--NOT REQUIRED --
-// Public() is the getter for the public information on the error, which could be boiled up to the end user if needed.
-// this means that for security reasons, public may not contain any sensitive information. public may be set to a nil string
-// if the error is not applicable to end users.
+import (
+	"fmt"
+)
 
+// ErrorInterface should be a return parameter from a function instead of error.
 type ErrorInterface interface {
 	error
 	IsNil() bool
 	Code() string
 	Kind() Kind
 	Public() (string, bool)
+	Private() ([]string, bool)
+	Retry()	 bool
 }
 
+// Kind defines a certain class of error, and should remain constant per package to allow for error handling.
 type Kind uint8
 
+// An enumeration. Make sure the first one is None, all others may be changed depending on package.
 const (
 	None          Kind = iota
 	Other              // Unclassified error. This value is not printed in the error message.
@@ -47,13 +38,17 @@ const (
 	BrokenLink         // Link target does not exist.
 )
 
+// The error struct to be
 type Error struct {
 	code   string
 	kind   Kind
 	public string
+	retry  bool
+	private []string
 	error
 }
 
+// IsNil is used to verify if the error is nil or not, since a nil interface != nil
 func (e *Error) IsNil() bool {
 	if e.code != "" {
 		return false
@@ -65,6 +60,7 @@ func (e *Error) IsNil() bool {
 	return true
 }
 
+// Code() is the getter for code.
 func (e *Error) Code() string {
 	if e.code != "" {
 		return e.code
@@ -73,6 +69,7 @@ func (e *Error) Code() string {
 	}
 }
 
+// Kind() is the getter for kind.
 func (e *Error) Kind() Kind {
 	if e.kind != None {
 		return e.kind
@@ -80,9 +77,40 @@ func (e *Error) Kind() Kind {
 	panic("Programming error is nil!")
 }
 
+// Public is the getter for public
 func (e *Error) Public() (string, bool) {
 	if e.public != "" {
 		return e.public, true
 	}
 	return e.public, false
 }
+
+// Private() is the getter for private
+func (e *Error) Private() ([]string, bool) {
+	if len(e.private) > 0 {
+		return e.private, true
+	}
+	return e.private, false
+}
+
+// Retry() is the getter for retry
+func (e *Error) Retry() bool {
+	return e.retry
+}
+
+func NewError(code string, kind Kind, public string, retry bool, private ...interface{}) ErrorInterface {
+
+	privates := make([]string, len(private))
+	for _, i := range private {
+		privates = append(privates, fmt.Sprintf("%v", i))
+	}
+
+	return &Error{
+		code:code,
+		kind:kind,
+		public:public,
+		retry:retry,
+		private:privates,
+	}
+}
+
