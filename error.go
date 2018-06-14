@@ -13,7 +13,7 @@ type ErrorInterface interface {
 	Kind() Kind
 	Public() (string, bool)
 	Private() ([]string, bool)
-	Retry()	 bool
+	Retry() bool
 }
 
 // Kind defines a certain class of error, and should remain constant per package to allow for error handling.
@@ -40,10 +40,10 @@ const (
 
 // The error struct to be
 type Error struct {
-	code   string
-	kind   Kind
-	public string
-	retry  bool
+	code    string
+	kind    Kind
+	public  string
+	retry   bool
 	private []string
 	error
 }
@@ -106,11 +106,10 @@ func NewError(code string, kind Kind, public string, retry bool, private ...inte
 	}
 
 	return &Error{
-		code:code,
-		kind:kind,
-		public:public,
-		retry:retry,
-		private:privates,
+		code:    code,
+		kind:    kind,
+		public:  public,
+		retry:   retry,
+		private: privates,
 	}
 }
-

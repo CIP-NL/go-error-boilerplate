@@ -24,7 +24,6 @@
 #   go-tests = true
 #   unused-packages = true
 
-
 [prune]
   go-tests = true
   unused-packages = true
@@ -32,4 +31,6 @@
 [[constraint]]
   name = "github.com/golangci/golangci-lint"
   version = "1.6.1"
-  required = ["github.com/golangci/golangci-lint/cmd/golangci-lint"]
+
+
+required = ["github.com/golangci/golangci-lint/cmd/golangci-lint"]

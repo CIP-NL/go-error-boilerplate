@@ -16,7 +16,7 @@ var err2 = NewError(
 	Private,
 	"",
 	true,
-	"accesstoken","privatekey",
+	"accesstoken", "privatekey",
 )
 
 func TestError_Code(t *testing.T) {
@@ -51,26 +51,38 @@ func TestError_Kind(t *testing.T) {
 
 func TestError_Private(t *testing.T) {
 	_, private := err1.Private()
-	if private { t.Error("err1 is not private!")}
+	if private {
+		t.Error("err1 is not private!")
+	}
 
 	_, private = err2.Private()
-	if !private {t.Error("err2 is private!")}
+	if !private {
+		t.Error("err2 is private!")
+	}
 }
 
 func TestError_Public(t *testing.T) {
 	_, public := err1.Public()
-	if public {t.Error("err1 does not have public strings")}
+	if public {
+		t.Error("err1 does not have public strings")
+	}
 
 	_, public = err2.Public()
-	if public {t.Error("err2 does not have public strings")}
+	if public {
+		t.Error("err2 does not have public strings")
+	}
 }
 
 func TestError_Retry(t *testing.T) {
 	retry := err1.Retry()
-	if retry {t.Error("retry should be false.")}
+	if retry {
+		t.Error("retry should be false.")
+	}
 
 	retry = err2.Retry()
-	if !retry {t.Error("retry should be true.")}
+	if !retry {
+		t.Error("retry should be true.")
+	}
 }
 
 func TestNewError(t *testing.T) {
@@ -81,6 +93,7 @@ func TestNewError(t *testing.T) {
 		false,
 	)
 
-	if err.Kind() != Other {t.Error("NewError generated a nil error")}
+	if err.Kind() != Other {
+		t.Error("NewError generated a nil error")
+	}
 }
-
