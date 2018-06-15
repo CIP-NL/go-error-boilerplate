@@ -16,7 +16,6 @@ var err2 = NewError(
 	Private,
 	"",
 	true,
-	"accesstoken", "privatekey",
 )
 
 func TestError_Code(t *testing.T) {
@@ -26,16 +25,6 @@ func TestError_Code(t *testing.T) {
 
 	if err2.Code() != "test:2" {
 		t.Error("Code 1 did not match")
-	}
-}
-
-func TestError_IsNil(t *testing.T) {
-	if err1.IsNil() {
-		t.Error("err1 is nil!")
-	}
-
-	if err2.IsNil() {
-		t.Error("err2 is nil!")
 	}
 }
 
@@ -49,17 +38,6 @@ func TestError_Kind(t *testing.T) {
 	}
 }
 
-func TestError_Private(t *testing.T) {
-	_, private := err1.Private()
-	if private {
-		t.Error("err1 is not private!")
-	}
-
-	_, private = err2.Private()
-	if !private {
-		t.Error("err2 is private!")
-	}
-}
 
 func TestError_Public(t *testing.T) {
 	_, public := err1.Public()
@@ -96,4 +74,10 @@ func TestNewError(t *testing.T) {
 	if err.Kind() != Other {
 		t.Error("NewError generated a nil error")
 	}
+}
+
+// Checks if, when no error is returned, IsNil still works.
+func TestError_IsNil2(t *testing.T) {
+	err := func() ErrorInterface {return nil}
+	if err() != nil {t.Error("Err.IsNil should be true but is not.")}
 }

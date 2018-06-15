@@ -4,7 +4,6 @@ package go_error_boilerplate
 // ErrorInterface should be a return parameter from a function instead of error.
 type ErrorInterface interface {
 	error
-	IsNil() bool
 	Code() string
 	Kind() Kind
 	Public() (string, bool)
@@ -41,19 +40,6 @@ type Error struct {
 	retry   bool
 	private []string
 	error
-}
-
-// IsNil is used to verify if the error is nil or not, since a nil interface != nil
-func (e *Error) IsNil() bool {
-
-	if e.code != "" {
-		return false
-	}
-
-	if e.kind != 0 {
-		return false
-	}
-	return true
 }
 
 // Code() is the getter for code.
