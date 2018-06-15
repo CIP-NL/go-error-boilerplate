@@ -38,7 +38,6 @@ type Error struct {
 	kind    Kind
 	public  string
 	retry   bool
-	private []string
 	error
 }
 
