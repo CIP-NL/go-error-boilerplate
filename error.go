@@ -1,10 +1,6 @@
 // Package go_error_boilerplate defines a boilerplate for the errors used in CIP go projects.
 package go_error_boilerplate
 
-import (
-	"fmt"
-)
-
 // ErrorInterface should be a return parameter from a function instead of error.
 type ErrorInterface interface {
 	error
@@ -12,7 +8,6 @@ type ErrorInterface interface {
 	Code() string
 	Kind() Kind
 	Public() (string, bool)
-	Private() ([]string, bool)
 	Retry() bool
 }
 
@@ -50,6 +45,7 @@ type Error struct {
 
 // IsNil is used to verify if the error is nil or not, since a nil interface != nil
 func (e *Error) IsNil() bool {
+
 	if e.code != "" {
 		return false
 	}
@@ -85,31 +81,18 @@ func (e *Error) Public() (string, bool) {
 	return e.public, false
 }
 
-// Private() is the getter for private
-func (e *Error) Private() ([]string, bool) {
-	if len(e.private) > 0 {
-		return e.private, true
-	}
-	return e.private, false
-}
-
 // Retry() is the getter for retry
 func (e *Error) Retry() bool {
 	return e.retry
 }
 
-func NewError(code string, kind Kind, public string, retry bool, private ...interface{}) ErrorInterface {
-
-	privates := make([]string, len(private))
-	for _, i := range private {
-		privates = append(privates, fmt.Sprintf("%v", i))
-	}
+// NewError returns a struct of interface ErrorInterface.
+func NewError(code string, kind Kind, public string, retry bool) ErrorInterface {
 
 	return &Error{
-		code:    code,
-		kind:    kind,
-		public:  public,
-		retry:   retry,
-		private: privates,
+		code:   code,
+		kind:   kind,
+		public: public,
+		retry:  retry,
 	}
 }
