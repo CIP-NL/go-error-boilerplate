@@ -46,7 +46,7 @@ func (e *E) Code() string {
 	if e.code != "" {
 		return e.code
 	} else {
-		panic("Programming error is nil!")
+		panic("ProgrammingError: error is nil!")
 	}
 }
 
@@ -55,7 +55,7 @@ func (e *E) Kind() Kind {
 	if e.kind != None {
 		return e.kind
 	}
-	panic("Programming error is nil!")
+	panic("ProgrammingError: error is nil!")
 }
 
 // Public is the getter for public. It is the human readable interface of the error and should not be compared against.
