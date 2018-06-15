@@ -78,6 +78,6 @@ func TestNewError(t *testing.T) {
 
 // Checks if, when no error is returned, IsNil still works.
 func TestError_IsNil2(t *testing.T) {
-	err := func() ErrorInterface {return nil}
+	err := func() Error {return nil}
 	if err() != nil {t.Error("Err.IsNil should be true but is not.")}
 }

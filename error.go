@@ -1,8 +1,8 @@
 // Package go_error_boilerplate defines a boilerplate for the errors used in CIP go projects.
 package go_error_boilerplate
 
-// ErrorInterface should be a return parameter from a function instead of error.
-type ErrorInterface interface {
+// Error should be a return parameter from a function instead of error.
+type Error interface {
 	error
 	Code() string
 	Kind() Kind
@@ -32,8 +32,8 @@ const (
 	BrokenLink         // Link target does not exist.
 )
 
-// The error struct to be
-type Error struct {
+// E is the the error struct to be returned by a NewError
+type E struct {
 	code    string
 	kind    Kind
 	public  string
@@ -42,7 +42,7 @@ type Error struct {
 }
 
 // Code() is the getter for code.
-func (e *Error) Code() string {
+func (e *E) Code() string {
 	if e.code != "" {
 		return e.code
 	} else {
@@ -51,7 +51,7 @@ func (e *Error) Code() string {
 }
 
 // Kind() is the getter for kind.
-func (e *Error) Kind() Kind {
+func (e *E) Kind() Kind {
 	if e.kind != None {
 		return e.kind
 	}
@@ -59,7 +59,7 @@ func (e *Error) Kind() Kind {
 }
 
 // Public is the getter for public
-func (e *Error) Public() (string, bool) {
+func (e *E) Public() (string, bool) {
 	if e.public != "" {
 		return e.public, true
 	}
@@ -67,14 +67,14 @@ func (e *Error) Public() (string, bool) {
 }
 
 // Retry() is the getter for retry
-func (e *Error) Retry() bool {
+func (e *E) Retry() bool {
 	return e.retry
 }
 
-// NewError returns a struct of interface ErrorInterface.
-func NewError(code string, kind Kind, public string, retry bool) ErrorInterface {
+// NewError returns a struct of interface Error.
+func NewError(code string, kind Kind, public string, retry bool) Error {
 
-	return &Error{
+	return &E{
 		code:   code,
 		kind:   kind,
 		public: public,
