@@ -2,6 +2,8 @@ package go_error_boilerplate
 
 import (
 	"testing"
+	"github.com/stretchr/testify/assert"
+
 )
 
 var err1 = NewError(
@@ -14,53 +16,37 @@ var err1 = NewError(
 var err2 = NewError(
 	"test:2",
 	Private,
-	"",
+	"Yes",
 	true,
 )
 
 func TestError_Code(t *testing.T) {
-	if err1.Code() != "test:1" {
-		t.Error("Code 1 did not match")
-	}
-
-	if err2.Code() != "test:2" {
-		t.Error("Code 1 did not match")
-	}
+	assert.Equal(t,"test:1", err1.Code(),)
+	assert.Equal(t,"test:2", err2.Code(),)
 }
 
 func TestError_Kind(t *testing.T) {
-	if err1.Kind() != Other {
-		t.Error("err1.Kind() should be Other!")
-	}
-
-	if err2.Kind() != Private {
-		t.Error("err2.Kind() should be Private!")
-	}
+	assert.Equal(t, err1.Kind(), Other)
+	assert.Equal(t, err2.Kind(), Private)
 }
 
 
 func TestError_Public(t *testing.T) {
 	_, public := err1.Public()
-	if public {
-		t.Error("err1 does not have public strings")
-	}
 
-	_, public = err2.Public()
-	if public {
-		t.Error("err2 does not have public strings")
-	}
+	assert.False(t, public)
+
+	_, public2 := err2.Public()
+	assert.True(t, public2)
+
 }
 
 func TestError_Retry(t *testing.T) {
 	retry := err1.Retry()
-	if retry {
-		t.Error("retry should be false.")
-	}
+	assert.False(t, retry)
 
-	retry = err2.Retry()
-	if !retry {
-		t.Error("retry should be true.")
-	}
+	retry2 := err2.Retry()
+	assert.True(t, retry2)
 }
 
 func TestNewError(t *testing.T) {
@@ -71,13 +57,12 @@ func TestNewError(t *testing.T) {
 		false,
 	)
 
-	if err.Kind() != Other {
-		t.Error("NewError generated a nil error")
-	}
+	assert.Error(t, err)
+	assert.Equal(t, err.Kind(), Other)
 }
 
 // Checks if, when no error is returned, IsNil still works.
 func TestError_IsNil2(t *testing.T) {
 	err := func() Error {return nil}
-	if err() != nil {t.Error("Err.IsNil should be true but is not.")}
+	assert.Nil(t, err())
 }
