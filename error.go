@@ -66,6 +66,10 @@ func (e *E) Public() (string, bool) {
 	return e.public, false
 }
 
+func (e *E) Error() (string, bool) {
+	return e.Public()
+}
+
 // Retry() is the getter for retry. It indicates to the calling function/party that they may retry with exponential backoff.
 func (e *E) Retry() bool {
 	return e.retry
