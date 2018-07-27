@@ -43,19 +43,12 @@ type E struct {
 
 // Code() is the getter for code. Code is used to identify errors and may be compared against.
 func (e *E) Code() string {
-	if e.code != "" {
-		return e.code
-	} else {
-		panic("ProgrammingError: error is nil!")
-	}
+	return e.code
 }
 
 // Kind() is the getter for kind. Kind is the general class of the error and may be compared against.
 func (e *E) Kind() Kind {
-	if e.kind != None {
-		return e.kind
-	}
-	panic("ProgrammingError: error is nil!")
+	return e.kind
 }
 
 // Public is the getter for public. It is the human readable interface of the error and should not be compared against.
@@ -66,8 +59,9 @@ func (e *E) Public() (string, bool) {
 	return e.public, false
 }
 
-func (e *E) Error() (string, bool) {
-	return e.Public()
+func (e *E) Error() string {
+	err, _ := e.Public()
+	return err
 }
 
 // Retry() is the getter for retry. It indicates to the calling function/party that they may retry with exponential backoff.
